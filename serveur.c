@@ -121,7 +121,7 @@ void serveur_appli(char *service)
 		pid = fork();
 
 		// Si c'est un processus fils
-		if(pid == 0){
+		if(pid == 0) {
 
 			h_close(IdSocket);
 
@@ -147,7 +147,7 @@ void serveur_appli(char *service)
 			h_reads(IdClient, rcvBuf, 1);//level, 1);
 			char lvl = rcvBuf[0];
 			
-			switch(lvl){
+			switch(lvl) {
 				case '1':
 					nbtentatives = taillemot + 5;
 					break;
@@ -163,7 +163,6 @@ void serveur_appli(char *service)
 			}
 			tableau[2 * taillemot] = nbtentatives; // indicateur du nombre de tentatives restantes
 			rcvBuf[0] = taillemot;
-			printf("Taille = %d\n", rcvBuf[0]);
 			h_writes(IdClient, rcvBuf, 1);
 			h_writes(IdClient, tableau, 100);
 			printf("Mot envoyé !\n");
@@ -171,10 +170,8 @@ void serveur_appli(char *service)
 			while (tableau[2 * taillemot] != 0){
 				h_reads(IdClient, rcvBuf, 1);
 				reponse = rcvBuf[0];
-				printf("Reception = %d %d\n", rcvBuf[0], rcvBuf[1]);
-				if (reponse != 10){ // On ignore les retours à la ligne
-					modif_copie(tableau, reponse, taillemot);//On ajuste le mot forme de tirets '-'
-				}
+				printf("Reception = %c\n", rcvBuf[0]);
+				modif_copie(tableau, reponse, taillemot);//On ajuste le mot forme de tirets '-'
 				h_writes(IdClient, tableau, 100);
 			}
 			h_close(IdClient);

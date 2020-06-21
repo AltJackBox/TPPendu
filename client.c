@@ -82,11 +82,11 @@ void client_appli (char *serveur,char *service)
 	
 	// Choix du niveau de difficulté par le client
 	// Le niveau de difficulté influe sur le nombre de tentatives
-	printf("Choisissez la difficulté du jeu : \n");
 	char lvl;
-	while ((lvl != '1') && (lvl != '2') && (lvl != '3')){
+	do{
+		printf("Choisissez la difficulté du jeu : \n");
 		lvl = getchar();
-	}
+	} while ((lvl != '1') && (lvl != '2') && (lvl != '3'));
 	// Envoi au serveur
 	h_writes(IdSocket, &lvl, 1);
 
@@ -98,16 +98,16 @@ void client_appli (char *serveur,char *service)
 	h_reads(IdSocket, taillemotrecu, 1);
 	h_reads(IdSocket, tableau, 100);
 	taillemot = (int)taillemotrecu[0];
-	printf("TailleClient = %d\n", taillemot);
 	for (int i = taillemot; i < 2 * taillemot ; i++){
 			printf("%c", tableau[i]);
 	}
 	printf("\n");
 	printf("?\n");
 	printf("%d tentatives restantes\n", tableau[2 * taillemot]);
-	while ((tableau[2 * taillemot] != 0) && (tableau[2 * taillemot + 1] == 0)){
-		entree = getchar();
-		printf("%d\n", entree);
+	while ((tableau[2 * taillemot] != 0) && (tableau[2 * taillemot + 1] == 0)) {
+		do{
+			entree = getchar();
+		} while ((entree == '\n') || (entree == ' '));
 		h_writes(IdSocket, &entree, 1);
 		h_reads(IdSocket, tableau, 100);
 		for (int i = taillemot; i < 2 * taillemot ; i++){
@@ -117,7 +117,7 @@ void client_appli (char *serveur,char *service)
 		printf("?\n");
 		printf("%d tentatives restantes\n", tableau[2 * taillemot]);
 	}
-	if (tableau[2 * taillemot + 1]){
+	if (tableau[2 * taillemot + 1]) {
 		printf("\n");
 		printf("\nGagné !\n");
 	} else {
